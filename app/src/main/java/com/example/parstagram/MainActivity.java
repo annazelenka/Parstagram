@@ -25,7 +25,11 @@ import com.parse.ParseQuery;
 import com.parse.ParseUser;
 import com.parse.SaveCallback;
 
+import java.io.ByteArrayOutputStream;
 import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
 import java.util.List;
 
 public class MainActivity extends AppCompatActivity {
@@ -78,8 +82,10 @@ public class MainActivity extends AppCompatActivity {
     private void launchCamera() {
         // create Intent to take a picture and return control to the calling application
         Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+
         // Create a File reference for future access
-        photoFile = getPhotoFileUri(photoFileName);
+        //photoFile = getPhotoFileUri(photoFileName);
+        photoFile = getResizedPhotoFileUri(photoFileName);
 
         // wrap File object into a content provider
         // required for API >= 24
@@ -94,6 +100,51 @@ public class MainActivity extends AppCompatActivity {
             startActivityForResult(intent, CAPTURE_IMAGE_ACTIVITY_REQUEST_CODE);
         }
     }
+
+    private File getResizedPhotoFileUri(String photoFileName) {
+        Uri takenPhotoUri = Uri.fromFile(getPhotoFileUri(photoFileName));
+        // by this point we have the camera photo on disk
+        Bitmap rawTakenImage = BitmapFactory.decodeFile(takenPhotoUri.getPath());
+        // See BitmapScaler.java: https://gist.github.com/nesquena/3885707fd3773c09f1bb
+        int imageWidth = 50;
+        Bitmap resizedBitmap = BitmapScaler.scaleToFitWidth(rawTakenImage, imageWidth);
+        // Then we can write that smaller bitmap back to disk with:
+
+        // Configure byte output stream
+        ByteArrayOutputStream bytes = new ByteArrayOutputStream();
+        // Compress the image further
+        resizedBitmap.compress(Bitmap.CompressFormat.JPEG, 40, bytes);
+        // Create a new file for the resized bitmap (`getPhotoFileUri` defined above)
+        File resizedFile = getPhotoFileUri(photoFileName + "_resized");
+        try {
+            resizedFile.createNewFile();
+        } catch (IOException e) {
+            Log.d(TAG, "failed to resize file");
+            e.printStackTrace();
+        }
+        FileOutputStream fos = null;
+        try {
+            fos = new FileOutputStream(resizedFile);
+        } catch (FileNotFoundException e) {
+            Log.d(TAG, "Resized file not found");
+            e.printStackTrace();
+        }
+        // Write the bytes of the bitmap to file
+        try {
+            fos.write(bytes.toByteArray());
+        } catch (IOException e) {
+            Log.d(TAG, "failed to write file");
+            e.printStackTrace();
+        }
+        try {
+            fos.close();
+        } catch (IOException e) {
+            Log.d(TAG, "failed to close FileOutputStream");
+            e.printStackTrace();
+        }
+        return resizedFile;
+    }
+
 
     // Returns the File for a photo stored on disk given the fileName
     public File getPhotoFileUri(String fileName) {
