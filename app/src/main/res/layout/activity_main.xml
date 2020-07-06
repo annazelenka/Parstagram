@@ -15,6 +15,12 @@
         android:ems="10"
         android:hint="Description..." />
 
+    <Button
+        android:id="@+id/btnCaptureImage"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Take Picture"></Button>
+
     <ImageView
         android:id="@+id/ivPostImage"
         android:layout_width="match_parent"
@@ -23,11 +29,6 @@
 
     </ImageView>
 
-    <Button
-        android:id="@+id/btnCaptureImage"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="Take Picture"></Button>
 
 
     <Button
