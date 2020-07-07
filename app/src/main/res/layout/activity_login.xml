@@ -29,7 +29,19 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_weight="1"
-        android:text="Login">
+        android:backgroundTint="#03A9F4"
+        android:text="Login"
+        android:textColor="@color/colorWhite">
     </Button>
+
+    <Button
+        android:id="@+id/btnSignup"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+        android:backgroundTint="#4CAF50"
+        android:text="SIGN UP"
+        android:textColor="@color/colorWhite"
+    />
 
 </LinearLayout>
