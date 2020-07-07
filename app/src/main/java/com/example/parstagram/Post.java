@@ -5,6 +5,13 @@ import com.parse.ParseFile;
 import com.parse.ParseObject;
 import com.parse.ParseUser;
 
+import org.parceler.Parcel;
+
+import java.text.DateFormat;
+import java.text.Format;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+
 @ParseClassName("Post") // name needs to match what you named it in Parse Dashboard
 public class Post extends ParseObject {
 
@@ -12,6 +19,10 @@ public class Post extends ParseObject {
     public static final String KEY_IMAGE = "image";
     public static final String KEY_USER = "user";
     public static final String KEY_CREATED_KEY = "createdAt";
+
+
+    public Post() {
+    } // empty constructor needed by Parcelable library
 
 
     public String getDescription() {
@@ -38,4 +49,10 @@ public class Post extends ParseObject {
         put(KEY_USER, user);
     }
 
+
+    public String getFormattedTimestamp() {
+        Format formatter = new SimpleDateFormat("h:mm a, MMMM d, yyyy");
+        String strDate = formatter.format(getCreatedAt());
+        return strDate;
+    }
 }

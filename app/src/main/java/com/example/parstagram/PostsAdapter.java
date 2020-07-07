@@ -1,6 +1,7 @@
 package com.example.parstagram;
 
 import android.content.Context;
+import android.content.Intent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -12,11 +13,17 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
 
+import org.parceler.Parcel;
+import org.parceler.Parcels;
+
 import java.util.List;
 
 import jp.wasabeef.glide.transformations.RoundedCornersTransformation;
 
 public class PostsAdapter extends RecyclerView.Adapter<PostsAdapter.ViewHolder> {
+
+    // Parcelable requires implementing a default constructor
+    PostsAdapter() { }
 
     private Context context;
     private List<Post> posts;
@@ -24,6 +31,17 @@ public class PostsAdapter extends RecyclerView.Adapter<PostsAdapter.ViewHolder> 
     public PostsAdapter(Context context, List<Post> posts) {
         this.context = context;
         this.posts = posts;
+    }
+
+    public void clear() {
+        posts.clear();
+        notifyDataSetChanged();
+    }
+
+    // Add a list of items -- change to type used
+    public void addAll(List<Post> list) {
+        posts.addAll(list);
+        notifyDataSetChanged();
     }
 
     @NonNull
@@ -45,17 +63,20 @@ public class PostsAdapter extends RecyclerView.Adapter<PostsAdapter.ViewHolder> 
         return posts.size();
     }
 
-    class ViewHolder extends RecyclerView.ViewHolder {
+    class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
 
-        private TextView tvUsername;
-        private ImageView ivImage;
-        private TextView tvDescription;
+        TextView tvUsername;
+        TextView tvDescription;
+        ImageView ivImage;
+
 
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
             tvUsername = itemView.findViewById(R.id.tvUsername);
             ivImage = itemView.findViewById(R.id.ivImage);
             tvDescription = itemView.findViewById(R.id.tvDescription);
+
+            itemView.setOnClickListener(this);
         }
 
         public void bind(Post post) {
@@ -74,5 +95,23 @@ public class PostsAdapter extends RecyclerView.Adapter<PostsAdapter.ViewHolder> 
             }
 
         }
+
+        @Override
+        public void onClick(View view) {
+            int position = getAdapterPosition();
+
+            if (position != RecyclerView.NO_POSITION) {
+                Post post = posts.get(position);
+
+                Intent intent = new Intent(context, PostDetailsActivity.class);
+                intent.putExtra("postDescription", post.getDescription());
+                intent.putExtra("postUsername", post.getUser().getUsername());
+                intent.putExtra("postImageUrl", post.getImage().getUrl());
+                intent.putExtra("postTimestamp", post.getFormattedTimestamp());
+                context.startActivity(intent);
+            }
+
+        }
+
     }
 }
