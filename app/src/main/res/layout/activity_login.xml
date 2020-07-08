@@ -5,7 +5,19 @@
     android:layout_height="wrap_content"
     android:layout_margin="16dp"
     android:orientation="vertical"
-    tools:context=".LoginActivity">
+    tools:context=".LoginActivity"
+    android:layout_gravity="center">
+
+    <TextView
+        android:id="@+id/tvTitle"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:fontFamily="@font/billabong"
+        android:gravity="center_horizontal"
+        android:text="Instagram"
+        android:textSize="48sp">
+
+    </TextView>
 
     <EditText
         android:id="@+id/etUsername"
@@ -13,7 +25,8 @@
         android:layout_height="wrap_content"
         android:layout_weight="1"
         android:ems="10"
-        android:hint="username" />
+        android:hint="username"
+        android:textSize="20sp" />
 
     <EditText
         android:id="@+id/etPassword"
@@ -22,7 +35,8 @@
         android:layout_weight="1"
         android:ems="10"
         android:hint="password"
-        android:inputType="textPassword"/>
+        android:inputType="textPassword"
+        android:textSize="20sp" />
 
     <Button
         android:id="@+id/btnLogin"
@@ -31,8 +45,8 @@
         android:layout_weight="1"
         android:backgroundTint="#03A9F4"
         android:text="Login"
-        android:textColor="@color/colorWhite">
-    </Button>
+        android:textColor="@color/colorWhite"
+        android:textSize="20sp"></Button>
 
     <Button
         android:id="@+id/btnSignup"
@@ -42,6 +56,6 @@
         android:backgroundTint="#4CAF50"
         android:text="SIGN UP"
         android:textColor="@color/colorWhite"
-    />
+        android:textSize="20sp" />
 
 </LinearLayout>
