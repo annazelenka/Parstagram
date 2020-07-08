@@ -67,6 +67,8 @@ public class PostsAdapter extends RecyclerView.Adapter<PostsAdapter.ViewHolder> 
 
         TextView tvUsername;
         TextView tvDescription;
+        TextView tvTimestamp;
+        TextView tvUsername2;
         ImageView ivImage;
 
 
@@ -75,6 +77,8 @@ public class PostsAdapter extends RecyclerView.Adapter<PostsAdapter.ViewHolder> 
             tvUsername = itemView.findViewById(R.id.tvUsername);
             ivImage = itemView.findViewById(R.id.ivImage);
             tvDescription = itemView.findViewById(R.id.tvDescription);
+            tvTimestamp = itemView.findViewById(R.id.tvTimeStamp);
+            tvUsername2 = itemView.findViewById(R.id.tvUsername2);
 
             itemView.setOnClickListener(this);
         }
@@ -83,6 +87,8 @@ public class PostsAdapter extends RecyclerView.Adapter<PostsAdapter.ViewHolder> 
             // Bind post data to view elements
             tvDescription.setText(post.getDescription());
             tvUsername.setText(post.getUser().getUsername());
+            tvTimestamp.setText(post.getFormattedTimestamp());
+            tvUsername2.setText(post.getUser().getUsername());
 
             int radius = 50;
             int margin = 50;
@@ -90,7 +96,7 @@ public class PostsAdapter extends RecyclerView.Adapter<PostsAdapter.ViewHolder> 
             if (post.getImage() != null) {
                 Glide.with(context)
                         .load(post.getImage().getUrl())
-                        .transform(new RoundedCornersTransformation(radius, margin))
+                        //.transform(new RoundedCornersTransformation(radius, margin))
                         .into(ivImage);
             }
 

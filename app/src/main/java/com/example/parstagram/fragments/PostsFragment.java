@@ -5,6 +5,7 @@ import android.os.Bundle;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
@@ -18,6 +19,7 @@ import android.widget.Button;
 import com.example.parstagram.Post;
 import com.example.parstagram.PostsAdapter;
 import com.example.parstagram.R;
+import com.example.parstagram.SpacesItemDecoration;
 import com.parse.FindCallback;
 import com.parse.ParseException;
 import com.parse.ParseQuery;
@@ -91,6 +93,12 @@ public class PostsFragment extends Fragment {
                 android.R.color.holo_green_light,
                 android.R.color.holo_orange_light,
                 android.R.color.holo_red_light);
+
+        // add dividers between posts
+
+        //rvPosts.addItemDecoration(new DividerItemDecoration(rvPosts.getContext(), DividerItemDecoration.VERTICAL));
+        SpacesItemDecoration decoration = new SpacesItemDecoration(100);
+        rvPosts.addItemDecoration(decoration);
     }
 
     private void refreshPostList(int i) {
