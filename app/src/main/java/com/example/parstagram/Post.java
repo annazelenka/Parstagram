@@ -19,6 +19,7 @@ public class Post extends ParseObject {
     public static final String KEY_IMAGE = "image";
     public static final String KEY_USER = "user";
     public static final String KEY_CREATED_KEY = "createdAt";
+    private static final String KEY_PROFILE_PIC = "profilePic";
 
 
     public Post() {
@@ -48,6 +49,11 @@ public class Post extends ParseObject {
     public void setUser(ParseUser user) {
         put(KEY_USER, user);
     }
+
+    public ParseFile getProfilePic() { return getUser().getParseFile(KEY_PROFILE_PIC); }
+
+    public void setProfilePic(ParseFile profilePic) { getUser().put(KEY_PROFILE_PIC, profilePic); }
+
 
 
     public String getFormattedTimestamp() {

@@ -4,6 +4,8 @@ import android.os.Bundle;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -11,18 +13,27 @@ import androidx.recyclerview.widget.RecyclerView;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import android.util.Log;
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.FrameLayout;
+import android.widget.ImageView;
+import android.widget.TextView;
+import android.widget.Toast;
 
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.resource.bitmap.RoundedCorners;
 import com.example.parstagram.Post;
 import com.example.parstagram.PostsAdapter;
 import com.example.parstagram.R;
 import com.example.parstagram.SpacesItemDecoration;
 import com.parse.FindCallback;
 import com.parse.ParseException;
+import com.parse.ParseFile;
 import com.parse.ParseQuery;
+import com.parse.ParseUser;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -33,6 +44,10 @@ public class PostsFragment extends Fragment {
     protected PostsAdapter adapter;
     protected List<Post> allPosts;
     protected Button btnLogout;
+    protected Button btnChangeProfilePic;
+    protected View divider;
+    protected ImageView ivProfilePic;
+    protected TextView tvUsername;
 
     private SwipeRefreshLayout swipeContainer;
 
@@ -60,7 +75,11 @@ public class PostsFragment extends Fragment {
         super.onViewCreated(view, savedInstanceState);
 
         btnLogout = view.findViewById(R.id.btnLogout);
-        handleLogoutButton();
+        ivProfilePic = view.findViewById(R.id.ivProfilePic);
+        tvUsername = view.findViewById(R.id.tvUsername);
+        btnChangeProfilePic = view.findViewById(R.id.btnChangeProfilePic);
+        divider = view.findViewById(R.id.divider);
+        handleProfileSetup(view);
 
         rvPosts = view.findViewById(R.id.rvPosts);
         // make recycler view
@@ -94,11 +113,11 @@ public class PostsFragment extends Fragment {
                 android.R.color.holo_orange_light,
                 android.R.color.holo_red_light);
 
-        // add dividers between posts
-
-        //rvPosts.addItemDecoration(new DividerItemDecoration(rvPosts.getContext(), DividerItemDecoration.VERTICAL));
-        SpacesItemDecoration decoration = new SpacesItemDecoration(100);
+        // add spacing between posts
+        SpacesItemDecoration decoration = new SpacesItemDecoration(50);
         rvPosts.addItemDecoration(decoration);
+
+
     }
 
     private void refreshPostList(int i) {
@@ -107,9 +126,17 @@ public class PostsFragment extends Fragment {
         swipeContainer.setRefreshing(false);
     }
 
-
-    protected void handleLogoutButton() {
+    protected void handleProfileSetup(View view) {
         btnLogout.setVisibility(View.GONE);
+        ivProfilePic.setVisibility(View.GONE);
+        tvUsername.setVisibility(View.GONE);
+        btnChangeProfilePic.setVisibility(View.GONE);
+        divider.setVisibility(View.GONE);
+
+        FrameLayout mylayout = (FrameLayout) view.findViewById(R.id.frameLayout);
+        ViewGroup.MarginLayoutParams params = (ViewGroup.MarginLayoutParams) mylayout.getLayoutParams();
+        params.setMargins(1, 2, 3, 4);
+        mylayout.setLayoutParams(params);
     }
 
     protected void queryPosts() {

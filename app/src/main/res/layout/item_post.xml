@@ -8,25 +8,32 @@
     android:scaleType="centerCrop"
     >
 
-    <LinearLayout
-        android:layout_width="match_parent"
+    <RelativeLayout
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:orientation="horizontal">
-        <ImageView
-            android:layout_width="50dp"
-            android:layout_height="50dp"
-            android:background="@color/colorTwitterBlue">
-        </ImageView>
+        android:layout_margin="8dp">
+
+    <ImageView
+        android:id="@+id/ivProfilePic"
+        android:layout_width="40dp"
+        android:layout_height="40dp"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentTop="true"
+        android:layout_marginStart="5dp"
+        android:src="@drawable/empty" />
         <TextView
             android:id="@+id/tvUsername"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="rahul"
             android:textSize="20sp"
-            android:layout_margin="8dp"
-            android:layout_marginBottom="0dp"
+            android:layout_alignTop="@+id/ivProfilePic"
+            android:layout_alignBottom="@+id/ivProfilePic"
+            android:gravity="center_vertical"
+            android:layout_marginLeft="8dp"
+            android:layout_toRightOf="@+id/ivProfilePic"
             android:textStyle="bold"/>
-    </LinearLayout>
+    </RelativeLayout>
 
     <ImageView
         android:id="@+id/ivImage"
@@ -34,10 +41,46 @@
         android:layout_height="300dp"
         android:scaleType="fitXY"
         android:background="@color/colorGray"
-        android:padding="1dp">
-        <!--        android:scaleType="centerCrop"-->
+        android:padding="1dp"
+        android:adjustViewBounds="true">
 
     </ImageView>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:scaleType="centerCrop"
+        >
+
+        <ImageButton
+            android:id="@+id/btnLike"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="8dp"
+            android:src="@android:drawable/btn_star"></ImageButton>
+
+        <ImageButton
+            android:id="@+id/btnComment"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@android:drawable/ic_menu_recent_history"></ImageButton>
+
+        <ImageButton
+            android:id="@+id/btnReply"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@android:drawable/ic_menu_send"></ImageButton>
+
+        <ImageButton
+            android:id="@+id/btnBookmark"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="right"
+            android:layout_marginRight="8dp"
+            android:src="@android:drawable/ic_menu_directions"></ImageButton>
+
+    </LinearLayout>
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -50,8 +93,8 @@
             android:layout_height="wrap_content"
             android:text="rahul"
             android:textSize="16sp"
-            android:layout_margin="8dp"
-            android:layout_marginBottom="0dp"
+            android:layout_marginLeft="8dp"
+            android:layout_marginTop="8dp"
             android:textStyle="bold"/>
         <TextView
             android:id="@+id/tvDescription"

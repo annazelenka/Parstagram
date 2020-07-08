@@ -7,11 +7,13 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.resource.bitmap.RoundedCorners;
 
 import org.parceler.Parcel;
 import org.parceler.Parcels;
@@ -70,6 +72,7 @@ public class PostsAdapter extends RecyclerView.Adapter<PostsAdapter.ViewHolder> 
         TextView tvTimestamp;
         TextView tvUsername2;
         ImageView ivImage;
+        ImageView ivProfilePic;
 
 
         public ViewHolder(@NonNull View itemView) {
@@ -79,6 +82,7 @@ public class PostsAdapter extends RecyclerView.Adapter<PostsAdapter.ViewHolder> 
             tvDescription = itemView.findViewById(R.id.tvDescription);
             tvTimestamp = itemView.findViewById(R.id.tvTimeStamp);
             tvUsername2 = itemView.findViewById(R.id.tvUsername2);
+            ivProfilePic = itemView.findViewById(R.id.ivProfilePic);
 
             itemView.setOnClickListener(this);
         }
@@ -90,16 +94,22 @@ public class PostsAdapter extends RecyclerView.Adapter<PostsAdapter.ViewHolder> 
             tvTimestamp.setText(post.getFormattedTimestamp());
             tvUsername2.setText(post.getUser().getUsername());
 
-            int radius = 50;
-            int margin = 50;
+            int profileImageRadius = 120;
 
             if (post.getImage() != null) {
                 Glide.with(context)
                         .load(post.getImage().getUrl())
-                        //.transform(new RoundedCornersTransformation(radius, margin))
                         .into(ivImage);
             }
 
+            if (post.getProfilePic() != null) {
+                Glide.with(context)
+                        .load(post.getProfilePic().getUrl())
+                        .transform(new RoundedCorners(profileImageRadius))
+                        .into(ivProfilePic);
+            } else {
+                Toast.makeText(context, "no profile pic", Toast.LENGTH_SHORT).show();
+            }
         }
 
         @Override
