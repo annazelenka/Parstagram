@@ -6,7 +6,7 @@
             res/values-vXX/styles.xml, while customizations related to
             backward-compatibility can go here.
         -->
-        <item name="colorPrimary">@color/colorlightGray</item>
+        <item name="colorPrimary">@color/colorBlack</item>
         <item name="colorPrimaryDark">@color/colorlightGray</item>
         <item name="colorAccent">@color/colorTwitterBlue</item>
 
@@ -40,6 +40,7 @@
     <style name="AppTheme" parent="AppBaseTheme">
         <!-- All customizations that are NOT specific to a particular API-level can go here. -->
         <item name="android:textColor">@color/colorBlack</item>
+        <item name="android:background">@color/colorWhite</item>
 
     </style>
 

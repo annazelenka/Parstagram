@@ -84,6 +84,7 @@ public class ComposeFragment extends Fragment {
                 launchCamera();
             }
         });
+        ivPostImage.setVisibility(View.GONE);
 
         //queryPosts();
         btnSubmit.setOnClickListener(new View.OnClickListener() {
@@ -196,6 +197,7 @@ public class ComposeFragment extends Fragment {
                 // RESIZE BITMAP, see section below
                 // Load the taken image into a preview
                 ivPostImage.setImageBitmap(takenImage);
+                ivPostImage.setVisibility(View.VISIBLE);
             } else { // Result was a failure
                 Toast.makeText(getContext(), "Picture wasn't taken!", Toast.LENGTH_SHORT).show();
             }

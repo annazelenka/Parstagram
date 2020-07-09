@@ -4,17 +4,21 @@
 
     <item
         android:id="@+id/action_home"
-        android:icon="@android:drawable/ic_menu_compass"
-        android:title="Home"
-        app:showAsAction="always" />
+        android:icon="@drawable/home"
+        app:showAsAction="always"
+        android:title=""
+        android:iconTint="@color/colorBlack"/>
     <item
         android:id="@+id/action_compose"
-        android:icon="@android:drawable/ic_menu_edit"
-        android:title="Compose"
-        app:showAsAction="always" />
+        android:icon="@drawable/add_image"
+        app:showAsAction="always"
+        android:title=""
+        android:iconTint="@color/colorBlack"/>
     <item
         android:id="@+id/action_profile"
         android:icon="@drawable/ic_baseline_person_24"
-        android:title="Profile"
-        app:showAsAction="always" />
+        app:showAsAction="always"
+        android:title=""
+        android:iconTint="@color/colorBlack"/>
+
 </menu>
