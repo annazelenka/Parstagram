@@ -107,8 +107,6 @@ public class PostsAdapter extends RecyclerView.Adapter<PostsAdapter.ViewHolder> 
                         .load(post.getProfilePic().getUrl())
                         .transform(new RoundedCorners(profileImageRadius))
                         .into(ivProfilePic);
-            } else {
-                Toast.makeText(context, "no profile pic", Toast.LENGTH_SHORT).show();
             }
         }
 
