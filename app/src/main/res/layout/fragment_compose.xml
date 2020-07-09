@@ -15,7 +15,9 @@
             android:layout_width="150dp"
             android:layout_height="150dp"
             android:scaleType="centerCrop"
-            tools:srcCompat="@tools:sample/avatars">
+            tools:srcCompat="@tools:sample/avatars"
+            android:background="@color/colorGray"
+            android:padding="1dp">
         </ImageView>
 
     <EditText
@@ -25,6 +27,8 @@
         android:ems="10"
         android:hint="Write a caption..."
         android:layout_toRightOf="@+id/ivPostImage"
+        android:layout_marginLeft="8dp"
+        android:layout_marginBottom="8dp"
         android:layout_marginRight="0dp"/>
 
 
@@ -50,8 +54,19 @@
         android:background="@color/colorGreen"
         android:textColor="@color/colorWhite"
         android:text="Share ➜"
-        android:layout_marginBottom="100dp">
+        android:layout_marginBottom="0dp">
     </Button>
+
+     <ProgressBar
+         android:id="@+id/pbLoading"
+         android:visibility="invisible"
+         android:layout_width="wrap_content"
+         android:layout_height="wrap_content"
+         android:layout_gravity="center_horizontal"
+         android:layout_marginBottom="100dp"/>
+
+
+
 
 
 </LinearLayout>

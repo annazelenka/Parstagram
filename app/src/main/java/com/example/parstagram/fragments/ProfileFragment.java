@@ -69,7 +69,6 @@ public class ProfileFragment extends PostsFragment {
         btnChangeProfilePic.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                // TODO: implement the ability to change profile pic
                 launchCamera();
             }
         });

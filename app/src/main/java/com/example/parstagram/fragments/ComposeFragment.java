@@ -3,6 +3,7 @@ package com.example.parstagram.fragments;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.Color;
 import android.hardware.Camera;
 import android.net.Uri;
 import android.os.Bundle;
@@ -13,6 +14,7 @@ import androidx.core.content.FileProvider;
 import androidx.fragment.app.Fragment;
 
 import android.os.Environment;
+import android.os.Handler;
 import android.provider.MediaStore;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -21,6 +23,7 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.ProgressBar;
 import android.widget.Toast;
 
 import com.example.parstagram.BitmapScaler;
@@ -53,6 +56,7 @@ public class ComposeFragment extends Fragment {
     private Button btnCaptureImage;
     private ImageView ivPostImage;
     private Button btnSubmit;
+    private ProgressBar pbLoading;
 
 
     public ComposeFragment() {
@@ -77,6 +81,7 @@ public class ComposeFragment extends Fragment {
         btnCaptureImage = view.findViewById(R.id.btnCaptureImage);
         ivPostImage = view.findViewById(R.id.ivPostImage);
         btnSubmit = view.findViewById(R.id.btnSubmit);
+        pbLoading = (ProgressBar) view.findViewById(R.id.pbLoading);
 
         btnCaptureImage.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -90,13 +95,25 @@ public class ComposeFragment extends Fragment {
         btnSubmit.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                String description = etDescription.getText().toString();
+                final String description = etDescription.getText().toString();
                 if (description.isEmpty()) {
                     Toast.makeText(getContext(), "Description cannot be empty", Toast.LENGTH_SHORT).show();
                     return;
                 }
+                Handler handler = new Handler();
+
                 ParseUser currentUser = ParseUser.getCurrentUser();
-                savePost(description, currentUser, photoFile);
+                pbLoading.setVisibility(ProgressBar.VISIBLE);
+
+                // delay post for 3 seconds so you can see the progress bar
+                handler.postDelayed(new Runnable() {
+                    public void run() {
+                        // yourMethod();
+                        ParseUser currentUser = ParseUser.getCurrentUser();
+                        savePost(description, currentUser, photoFile);
+                        pbLoading.setVisibility(ProgressBar.INVISIBLE);
+                    }
+                }, 3000);
 
             }
         });
@@ -220,7 +237,7 @@ public class ComposeFragment extends Fragment {
                     Log.e(TAG, "Error while saving", e);
                     Toast.makeText(getContext(), "error while saving!", Toast.LENGTH_SHORT).show();
                 }
-                Log.i(TAG, "Post save was successful!!");
+                Toast.makeText(getContext(), "Posted!", Toast.LENGTH_LONG).show();
                 etDescription.setText("");
                 ivPostImage.setImageResource(0); // empty resource id
             }
