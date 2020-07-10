@@ -18,6 +18,7 @@ import org.parceler.Parcel;
 import java.text.DateFormat;
 import java.text.Format;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Date;
 
@@ -32,6 +33,7 @@ public class Post extends ParseObject {
     private static final String KEY_PROFILE_PIC = "profilePic";
     private static final String KEY_NUM_LIKES = "numLikes";
     private static final String KEY_USERS_LIKED = "usersThatLiked";
+    private static final String KEY_COMMENTS = "comments";
 
 
     // empty constructor needed by Parcelable library
@@ -67,8 +69,6 @@ public class Post extends ParseObject {
 
     public void setProfilePic(ParseFile profilePic) { getUser().put(KEY_PROFILE_PIC, profilePic); }
 
-
-
     public String getFormattedTimestamp() {
         Format formatter = new SimpleDateFormat("h:mm a, MMMM d, yyyy");
         String strDate = formatter.format(getCreatedAt());
@@ -92,9 +92,7 @@ public class Post extends ParseObject {
     }
 
     public JSONArray getUsersThatLiked() {
-        //return getParseObject(KEY_USERS_LIKED);
-        return getJSONArray("usersThatLiked");
-
+        return getJSONArray(KEY_USERS_LIKED);
     }
 
 
@@ -102,4 +100,30 @@ public class Post extends ParseObject {
         return getInt(KEY_NUM_LIKES);
     }
 
+    public void addCommentToDatabase(String comment) {
+        add(KEY_COMMENTS, comment);
+    }
+
+    public JSONArray getComments() { return getJSONArray(KEY_COMMENTS); }
+
+    public ArrayList<String> getParsedComments() {
+        JSONArray rawComments = getComments();
+        ArrayList<String> comments = new ArrayList<String>();
+
+        if (rawComments != null) {
+            for (int i = 0; i < rawComments.length(); i++) {
+                String comment = "";
+                try {
+                    comment = rawComments.get(i).toString();
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                    Log.i("Post", "failed to retrieve username");
+                    return null;
+                }
+                comments.add(comment);
+
+            }
+        }
+        return comments;
+    }
 }

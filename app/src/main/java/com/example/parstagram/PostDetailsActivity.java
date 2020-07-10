@@ -1,11 +1,15 @@
 package com.example.parstagram;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.view.animation.AnimationUtils;
+import android.widget.Button;
+import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -22,6 +26,9 @@ import org.json.JSONException;
 import org.parceler.Parcel;
 import org.parceler.Parcels;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import jp.wasabeef.glide.transformations.RoundedCornersTransformation;
 
 
@@ -36,7 +43,14 @@ public class PostDetailsActivity extends AppCompatActivity {
     ImageView ivImage;
     ImageView ivProfilePic;
     ImageButton btnLike;
+    ImageButton btnComment;
+    RecyclerView rvItems;
+    ItemsAdapter itemsAdapter;
+    EditText etComment;
+    Button btnPostComment;
 
+
+    List<String> items;
     boolean currentUserLikedPost;
     ParseUser currentUser;
     Post post;
@@ -54,11 +68,24 @@ public class PostDetailsActivity extends AppCompatActivity {
         tvNumLikes = findViewById(R.id.tvNumLikes);
         ivProfilePic = findViewById(R.id.ivProfilePic);
         btnLike = findViewById(R.id.btnLike);
+        btnComment = findViewById(R.id.btnComment);
+        etComment = findViewById(R.id.etComment);
+        btnPostComment = findViewById(R.id.btnPostComment);
+
 
         currentUserLikedPost = false;
         currentUser = ParseUser.getCurrentUser();
         post = (Post) Parcels.unwrap(getIntent().getParcelableExtra("post"));
         setResult(POST_DETAIL_RESULT); // set result code and bundle data for response
+
+        items = new ArrayList<String>();
+        loadComments();
+
+
+        rvItems = findViewById(R.id.rvItems);
+        itemsAdapter = new ItemsAdapter(items);
+        rvItems.setAdapter(itemsAdapter);
+        rvItems.setLayoutManager(new LinearLayoutManager(this));
 
         populateViews();
     }
@@ -69,6 +96,9 @@ public class PostDetailsActivity extends AppCompatActivity {
         tvUsername.setText(post.getUser().getUsername());
         tvTimestamp.setText(post.getFormattedTimestamp());
         tvUsername2.setText(post.getUser().getUsername());
+
+        etComment.setVisibility(View.GONE);
+        btnPostComment.setVisibility(View.GONE);
 
         int profileImageRadius = 120;
 
@@ -102,20 +132,37 @@ public class PostDetailsActivity extends AppCompatActivity {
                 }
 
 
-                post.saveInBackground(new SaveCallback() {
-                    @Override
-                    public void done(ParseException e) {
-                        if (e != null) {
-                            Log.e("ComposeFragment", "Error while saving", e);
-                            Toast.makeText(PostDetailsActivity.this, "error while saving!", Toast.LENGTH_SHORT).show();
-
-                            return;
-                        }
-                        Toast.makeText(PostDetailsActivity.this, "saved!", Toast.LENGTH_SHORT).show();
-                    }
-                });
+                savePost();
                 updateHeartIcon(post);
                 updateNumLikes(post);
+            }
+        });
+
+        btnComment.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                etComment.setVisibility(View.VISIBLE);
+                btnPostComment.setVisibility(View.VISIBLE);
+            }
+        });
+
+        btnPostComment.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                String comment = etComment.getText().toString();
+
+                if (comment.isEmpty()) {
+                    Toast.makeText(PostDetailsActivity.this, "Comment cannot be empty", Toast.LENGTH_SHORT).show();
+                } else {
+                    post.addCommentToDatabase(comment);
+                    // add comment to recycler view
+                    //Add item to model
+                    items.add(comment);
+                    //Notify Adapter that we've inserted an item
+                    itemsAdapter.notifyItemInserted(items.size() - 1);
+                    etComment.setText("");
+                    savePost();
+                }
             }
         });
 
@@ -154,42 +201,24 @@ public class PostDetailsActivity extends AppCompatActivity {
         tvNumLikes.setText(String.valueOf(numLikes) + " likes");
     }
 
+    private void loadComments() {
+        items = post.getParsedComments();
+    }
+
+    private void savePost() {
+        post.saveInBackground(new SaveCallback() {
+            @Override
+            public void done(ParseException e) {
+                if (e != null) {
+                    Log.e("ComposeFragment", "Error while saving", e);
+                    Toast.makeText(PostDetailsActivity.this, "error while saving!", Toast.LENGTH_SHORT).show();
+
+                    return;
+                }
+                Toast.makeText(PostDetailsActivity.this, "saved!", Toast.LENGTH_SHORT).show();
+            }
+        });
+    }
 
 }
 
-
-//    TextView tvUsername;
-//    TextView tvDescription;
-//    TextView tvTimestamp;
-//    ImageView ivImage;
-//
-//    @Override
-//    protected void onCreate(Bundle savedInstanceState) {
-//        super.onCreate(savedInstanceState);
-//        //setContentView(R.layout.activity_post_details);
-//        setContentView(R.layout.item_post);
-//
-//
-//        tvUsername = findViewById(R.id.tvUsername);
-//        tvDescription = findViewById(R.id.tvDescription);
-//        tvTimestamp = findViewById(R.id.tvTimestamp);
-//        ivImage = findViewById(R.id.ivImage);
-//
-//        //Post post = (Post) Parcels.unwrap(getIntent().getParcelableExtra("post"));
-//        tvUsername.setText(getIntent().getStringExtra("postUsername"));
-//        tvDescription.setText(getIntent().getStringExtra("postDescription"));
-//        tvTimestamp.setText(getIntent().getStringExtra("postTimestamp"));
-//        int radius = 50;
-//        int margin = 50;
-//
-//        String imageUrl = getIntent().getStringExtra("postImageUrl");
-//
-//
-//        if (imageUrl != null) {
-//            Glide.with(this)
-//                    .load(imageUrl)
-//                    //.transform(new RoundedCornersTransformation(radius, margin))
-//                    .into(ivImage);
-//        }
-//
-//    }

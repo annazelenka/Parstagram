@@ -148,7 +148,17 @@
             android:layout_marginRight="8dp"
             android:layout_marginBottom="0dp"/>
     </LinearLayout>
-
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/rvItems"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_above="@+id/etItem"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentEnd="true"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="0dp"
+        android:layout_marginEnd="0dp"
+        android:layout_marginBottom="0dp" />
     <TextView
         android:id="@+id/tvTimeStamp"
         android:layout_width="match_parent"
@@ -166,19 +176,22 @@
         >
     <EditText
         android:id="@+id/etComment"
-        android:layout_width="350dp"
+        android:layout_width="300dp"
         android:layout_marginRight="0dp"
         android:layout_height="wrap_content">
 
     </EditText>
 
         <Button
+            android:id="@+id/btnPostComment"
             android:layout_width="50dp"
             android:layout_height="50dp"
             android:layout_alignParentEnd="true"
             android:layout_marginEnd="0dp"
             android:layout_toRightOf="@+id/etComment"
             android:background="@drawable/roundshapebtn"
-            android:text="Post"></Button>
+            android:text="Post"
+            android:textColor="@color/colorWhite"></Button>
     </RelativeLayout>
+
 </LinearLayout>
