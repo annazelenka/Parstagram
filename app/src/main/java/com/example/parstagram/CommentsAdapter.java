@@ -1,6 +1,7 @@
 package com.example.parstagram;
 
 
+import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -12,12 +13,14 @@ import androidx.recyclerview.widget.RecyclerView;
 import java.util.List;
 
 //responsible for displaying data from the model into a row in the recycler view
-public class ItemsAdapter extends RecyclerView.Adapter<ItemsAdapter.ViewHolder> {
+public class CommentsAdapter extends RecyclerView.Adapter<CommentsAdapter.ViewHolder> {
 
-    List<String> items;
+    List<String> comments;
+    Context context;
 
-    public ItemsAdapter(List<String> items) {
-        this.items = items;
+    public CommentsAdapter(Context context, List<String> comments) {
+        this.context = context;
+        this.comments = comments;
     }
 
     @NonNull
@@ -25,16 +28,17 @@ public class ItemsAdapter extends RecyclerView.Adapter<ItemsAdapter.ViewHolder> 
     //creates each view
     public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         //Use layout inflater to inflate a view
-        View todoView = LayoutInflater.from(parent.getContext()).inflate(android.R.layout.simple_list_item_1,parent,false);
-        //wrap it inside a View Holder and return it
-        return new ViewHolder(todoView);
+        //View todoView = LayoutInflater.from(parent.getContext()).inflate(android.R.layout.simple_list_item_1,parent,false);
+
+        View view = LayoutInflater.from(context).inflate(R.layout.item_comment, parent, false);
+        return new CommentsAdapter.ViewHolder(view);
     }
 
     //take date at position and puts it into view holder
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
         //Grab item at position
-        String item = items.get(position);
+        String item = comments.get(position);
         //Bind item into specified View Holder
         holder.bind(item);
     }
@@ -42,21 +46,26 @@ public class ItemsAdapter extends RecyclerView.Adapter<ItemsAdapter.ViewHolder> 
     //Tells the RecyclerView how many items are in the list
     @Override
     public int getItemCount() {
-        return items.size();
+        return comments.size();
     }
 
     //Container to provide easy access to views that represent each row in the list
     class ViewHolder extends RecyclerView.ViewHolder {
-        TextView tvItem;
+        TextView tvCommentUser;
+        TextView tvComment;
 
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
-            tvItem = itemView.findViewById(android.R.id.text1);
+
+            tvCommentUser = itemView.findViewById(R.id.tvCommentUser);
+            tvComment = itemView.findViewById(R.id.tvComment);
         }
 
         //Update the view inside the View Holder with this data
         public void bind(String item) {
-            tvItem.setText(item);
+            int spaceIndex = item.indexOf(' ');
+            tvCommentUser.setText(item.substring(0,spaceIndex));
+            tvComment.setText(item.substring(spaceIndex+1));
 
         }
     }

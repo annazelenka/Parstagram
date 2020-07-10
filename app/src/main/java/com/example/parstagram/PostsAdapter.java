@@ -76,8 +76,6 @@ public class PostsAdapter extends RecyclerView.Adapter<PostsAdapter.ViewHolder> 
     }
 
     class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
-
-
         TextView tvUsername;
         TextView tvDescription;
         TextView tvTimestamp;
@@ -177,8 +175,6 @@ public class PostsAdapter extends RecyclerView.Adapter<PostsAdapter.ViewHolder> 
                 Intent intent = new Intent(context, PostDetailsActivity.class);
                 intent.putExtra("post", Parcels.wrap(post));
                 ((Activity) context).startActivityForResult(intent, POST_DETAIL_REQUEST_CODE);
-                //context.startActivity(intent);
-
             }
 
         }

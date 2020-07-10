@@ -23,13 +23,10 @@ import com.parse.SaveCallback;
 
 import org.json.JSONArray;
 import org.json.JSONException;
-import org.parceler.Parcel;
 import org.parceler.Parcels;
 
 import java.util.ArrayList;
 import java.util.List;
-
-import jp.wasabeef.glide.transformations.RoundedCornersTransformation;
 
 
 public class PostDetailsActivity extends AppCompatActivity {
@@ -44,13 +41,13 @@ public class PostDetailsActivity extends AppCompatActivity {
     ImageView ivProfilePic;
     ImageButton btnLike;
     ImageButton btnComment;
-    RecyclerView rvItems;
-    ItemsAdapter itemsAdapter;
+    RecyclerView rvComments;
+    CommentsAdapter commentsAdapter;
     EditText etComment;
     Button btnPostComment;
 
 
-    List<String> items;
+    List<String> comments;
     boolean currentUserLikedPost;
     ParseUser currentUser;
     Post post;
@@ -78,14 +75,14 @@ public class PostDetailsActivity extends AppCompatActivity {
         post = (Post) Parcels.unwrap(getIntent().getParcelableExtra("post"));
         setResult(POST_DETAIL_RESULT); // set result code and bundle data for response
 
-        items = new ArrayList<String>();
+        comments = new ArrayList<String>();
         loadComments();
 
 
-        rvItems = findViewById(R.id.rvItems);
-        itemsAdapter = new ItemsAdapter(items);
-        rvItems.setAdapter(itemsAdapter);
-        rvItems.setLayoutManager(new LinearLayoutManager(this));
+        rvComments = findViewById(R.id.rvItems);
+        commentsAdapter = new CommentsAdapter(PostDetailsActivity.this, comments);
+        rvComments.setAdapter(commentsAdapter);
+        rvComments.setLayoutManager(new LinearLayoutManager(this));
 
         populateViews();
     }
@@ -154,12 +151,13 @@ public class PostDetailsActivity extends AppCompatActivity {
                 if (comment.isEmpty()) {
                     Toast.makeText(PostDetailsActivity.this, "Comment cannot be empty", Toast.LENGTH_SHORT).show();
                 } else {
+                    comment = currentUser.getUsername() + " " + comment.trim();
                     post.addCommentToDatabase(comment);
                     // add comment to recycler view
                     //Add item to model
-                    items.add(comment);
+                    comments.add(comment);
                     //Notify Adapter that we've inserted an item
-                    itemsAdapter.notifyItemInserted(items.size() - 1);
+                    commentsAdapter.notifyItemInserted(comments.size() - 1);
                     etComment.setText("");
                     savePost();
                 }
@@ -202,7 +200,7 @@ public class PostDetailsActivity extends AppCompatActivity {
     }
 
     private void loadComments() {
-        items = post.getParsedComments();
+        comments = post.getParsedComments();
     }
 
     private void savePost() {
