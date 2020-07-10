@@ -6,10 +6,42 @@
     android:layout_height="match_parent"
     tools:context=".fragments.PostsFragment">
 
+    <androidx.appcompat.widget.Toolbar
+        android:id="@+id/toolbar"
+        android:minHeight="?attr/actionBarSize"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:titleTextColor="@color/colorBlack"
+        android:background="@color/colorWhite"
+        >
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Instagram"
+            android:layout_marginLeft="100dp"
+            android:id="@+id/toolbar_title"
+            android:fontFamily="@font/billabong"
+            android:textColor="@color/colorBlack"
+            android:textSize="40dp">
+    </TextView>
+        <View
+            android:background="@color/colorBlack"
+            android:layout_width="match_parent"
+            android:layout_height="2dp"
+            android:layout_marginTop="50dp"
+            />
+        </RelativeLayout>
+
+    </androidx.appcompat.widget.Toolbar>
+
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:id="@+id/relativeLayoutChild">
+        android:id="@+id/relativeLayoutChild"
+        android:layout_below="@+id/toolbar">
 
 
         <ImageView

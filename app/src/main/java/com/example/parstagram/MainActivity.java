@@ -86,12 +86,6 @@ public class MainActivity extends AppCompatActivity {
         // Set default selection
         bottomNavigationView.setSelectedItemId(R.id.action_home);
 
-
-        // Find the toolbar view inside the activity layout
-//        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
-//        // Sets the Toolbar to act as the ActionBar for this Activity window.
-//        // Make sure the toolbar exists in the activity and is not null
-//        setSupportActionBar(toolbar);
     }
 
     // Menu icons are inflated just as they were with actionbar

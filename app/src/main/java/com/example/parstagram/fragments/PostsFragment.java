@@ -28,6 +28,7 @@ import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.resource.bitmap.RoundedCorners;
+import com.example.parstagram.MainActivity;
 import com.example.parstagram.Post;
 import com.example.parstagram.PostsAdapter;
 import com.example.parstagram.R;
@@ -51,6 +52,7 @@ public class PostsFragment extends Fragment {
     protected View divider;
     protected ImageView ivProfilePic;
     protected TextView tvUsername;
+    Toolbar toolbar;
 
     private SwipeRefreshLayout swipeContainer;
 
@@ -82,6 +84,11 @@ public class PostsFragment extends Fragment {
         tvUsername = view.findViewById(R.id.tvUsername);
         btnChangeProfilePic = view.findViewById(R.id.btnChangeProfilePic);
         divider = view.findViewById(R.id.divider);
+        // Find the toolbar view inside the activity layout
+        toolbar = (Toolbar) view.findViewById(R.id.toolbar);
+        // Sets the Toolbar to act as the ActionBar for this Activity window.
+        // Make sure the toolbar exists in the activity and is not null
+        ((MainActivity) getActivity()).setSupportActionBar(toolbar);
 
         handleProfileSetup(view);
 

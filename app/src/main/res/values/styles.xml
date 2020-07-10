@@ -7,7 +7,7 @@
             backward-compatibility can go here.
         -->
         <item name="colorPrimary">@color/colorBlack</item>
-        <item name="colorPrimaryDark">@color/colorlightGray</item>
+        <item name="colorPrimaryDark">@color/colorBlack</item>
         <item name="colorAccent">@color/colorTwitterBlue</item>
 
 
@@ -32,6 +32,8 @@
         <item name="android:textSize">48sp</item>
         <item name="android:textColor">@color/colorBlack</item>
         <item name="android:fontFamily">@font/billabong</item>
+        <item name="android:gravity">center</item>
+        <item name="android:layout_marginLeft">200dp</item>
 
     </style>
 

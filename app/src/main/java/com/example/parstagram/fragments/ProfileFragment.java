@@ -50,6 +50,8 @@ public class ProfileFragment extends PostsFragment {
         btnChangeProfilePic.setVisibility(View.VISIBLE);
         divider.setVisibility(View.VISIBLE);
 
+        toolbar.setVisibility(View.GONE);
+
         ParseUser user = ParseUser.getCurrentUser();
         tvUsername.setText(user.getUsername());
 
