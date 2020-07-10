@@ -1,5 +1,6 @@
 package com.example.parstagram;
 
+import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.util.Log;
@@ -13,16 +14,19 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
+import androidx.fragment.app.FragmentActivity;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.resource.bitmap.RoundedCorners;
+import com.example.parstagram.fragments.PostDetailFragment;
 import com.parse.ParseException;
 import com.parse.ParseUser;
 import com.parse.SaveCallback;
 
 import org.json.JSONArray;
 import org.json.JSONException;
+import org.parceler.Parcels;
 
 import java.util.List;
 
@@ -30,6 +34,8 @@ public class PostsAdapter extends RecyclerView.Adapter<PostsAdapter.ViewHolder> 
 
     // Parcelable requires implementing a default constructor
     PostsAdapter() { }
+
+    private static final int POST_DETAIL_REQUEST_CODE = 19;
 
     private Context context;
     private List<Post> posts;
@@ -71,6 +77,7 @@ public class PostsAdapter extends RecyclerView.Adapter<PostsAdapter.ViewHolder> 
 
     class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
 
+
         TextView tvUsername;
         TextView tvDescription;
         TextView tvTimestamp;
@@ -96,7 +103,6 @@ public class PostsAdapter extends RecyclerView.Adapter<PostsAdapter.ViewHolder> 
             btnLike = itemView.findViewById(R.id.btnLike);
 
             itemView.setOnClickListener(this);
-            currentUserLikedPost = false;
 
             currentUser = ParseUser.getCurrentUser();
         }
@@ -107,6 +113,8 @@ public class PostsAdapter extends RecyclerView.Adapter<PostsAdapter.ViewHolder> 
             tvUsername.setText(post.getUser().getUsername());
             tvTimestamp.setText(post.getFormattedTimestamp());
             tvUsername2.setText(post.getUser().getUsername());
+
+            currentUserLikedPost = false;
 
             int profileImageRadius = 120;
 
@@ -139,6 +147,9 @@ public class PostsAdapter extends RecyclerView.Adapter<PostsAdapter.ViewHolder> 
                         currentUserLikedPost = false;
                     }
 
+                    updateHeartIcon(post);
+                    updateNumLikes(post);
+
 
                     post.saveInBackground(new SaveCallback() {
                         @Override
@@ -150,8 +161,6 @@ public class PostsAdapter extends RecyclerView.Adapter<PostsAdapter.ViewHolder> 
                             Toast.makeText(context, "Liked!", Toast.LENGTH_LONG).show();
                         }
                     });
-                    updateHeartIcon(post);
-                    updateNumLikes(post);
                 }
             });
 
@@ -166,20 +175,22 @@ public class PostsAdapter extends RecyclerView.Adapter<PostsAdapter.ViewHolder> 
                 Post post = posts.get(position);
 
                 Intent intent = new Intent(context, PostDetailsActivity.class);
-                intent.putExtra("postDescription", post.getDescription());
-                intent.putExtra("postUsername", post.getUser().getUsername());
-                intent.putExtra("postImageUrl", post.getImage().getUrl());
-                intent.putExtra("postTimestamp", post.getFormattedTimestamp());
-                context.startActivity(intent);
+                intent.putExtra("post", Parcels.wrap(post));
+                ((Activity) context).startActivityForResult(intent, POST_DETAIL_REQUEST_CODE);
+                //context.startActivity(intent);
+
             }
 
         }
+
+
+
 
         private void updateHeartIcon(Post post) {
             String currentUsername = currentUser.getUsername();
             JSONArray usersThatLiked = post.getUsersThatLiked();
 
-            boolean userAlreadyLiked = false;
+            Log.i("ViewHolder", "updateHeartIcon called");
 
             if (usersThatLiked != null) {
                 for (int i = 0; i < usersThatLiked.length(); i++) {
@@ -191,16 +202,18 @@ public class PostsAdapter extends RecyclerView.Adapter<PostsAdapter.ViewHolder> 
                         Log.i("Post", "failed to retrieve username");
                     }
                     if (username.equals(currentUsername)) {
-                        userAlreadyLiked = true;
+                        currentUserLikedPost = true;
                     }
 
                 }
             }
 
-            if (userAlreadyLiked) {
+            if (currentUserLikedPost) {
+                Log.i("ViewHolder", "change to active");
                 btnLike.setImageResource(R.drawable.ufi_heart_active);
             } else {
                 btnLike.setImageResource(R.drawable.ufi_heart);
+                Log.i("ViewHolder", "change to NOT active");
             }
         }
 
@@ -208,7 +221,6 @@ public class PostsAdapter extends RecyclerView.Adapter<PostsAdapter.ViewHolder> 
             int numLikes = post.getNumLikes();
             tvNumLikes.setText(String.valueOf(numLikes) + " likes");
         }
-
 
 
 

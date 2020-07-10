@@ -8,6 +8,7 @@ import androidx.core.content.FileProvider;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 
+import android.app.FragmentTransaction;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -45,11 +46,13 @@ import java.util.List;
 public class MainActivity extends AppCompatActivity {
 
     public static final String TAG = "MainActivity";
+    public static final int POST_DETAIL_REQUEST_CODE = 19;
 
     final FragmentManager fragmentManager = getSupportFragmentManager();
     private BottomNavigationView bottomNavigationView;
 
     Toolbar toolbar;
+    PostsFragment postsFragment;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -64,7 +67,9 @@ public class MainActivity extends AppCompatActivity {
                 Fragment fragment;
                 switch (menuItem.getItemId()) {
                     case R.id.action_home:
+
                         fragment = new PostsFragment();
+                        postsFragment = (PostsFragment) fragment;
                         break;
                     case R.id.action_compose:
                         fragment = new ComposeFragment();
@@ -95,6 +100,16 @@ public class MainActivity extends AppCompatActivity {
         // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.menu_main, menu);
         return true;
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (resultCode == POST_DETAIL_REQUEST_CODE) {
+            // reload fragment
+            postsFragment.refreshPostList(0);
+            Log.i("MainActivity", "refreshed!!");
+        }
     }
 
 }

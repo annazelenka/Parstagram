@@ -21,6 +21,7 @@ import java.text.SimpleDateFormat;
 import java.util.Arrays;
 import java.util.Date;
 
+@Parcel(analyze={Post.class})
 @ParseClassName("Post") // name needs to match what you named it in Parse Dashboard
 public class Post extends ParseObject {
 
@@ -33,9 +34,9 @@ public class Post extends ParseObject {
     private static final String KEY_USERS_LIKED = "usersThatLiked";
 
 
-
+    // empty constructor needed by Parcelable library
     public Post() {
-    } // empty constructor needed by Parcelable library
+    }
 
 
     public String getDescription() {
@@ -76,10 +77,10 @@ public class Post extends ParseObject {
 
 
 
-    public void updatePostLikesInDatabase(ParseUser currentUser, boolean userAlreadyLiked) {
+    public void updatePostLikesInDatabase(ParseUser currentUser, boolean currentUserLikedPost) {
         String currentUsername = currentUser.getUsername();
 
-        if (!userAlreadyLiked) {
+        if (!currentUserLikedPost) {
             add(KEY_USERS_LIKED, currentUsername);
             increment(KEY_NUM_LIKES);
             Log.i("Post", "blah");

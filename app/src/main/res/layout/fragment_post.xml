@@ -35,11 +35,14 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginRight="0dp"
-        android:layout_marginLeft="80dp"
         android:layout_toRightOf="@+id/tvUsername"
         android:text="Log Out"
         android:layout_alignParentRight="true"
-        android:layout_alignParentTop="true" />
+        android:layout_alignParentTop="true"
+        android:background="@color/colorInstagramBlue"
+        android:textColor="@color/colorWhite"
+        android:layout_alignLeft="@+id/btnChangeProfilePic"
+            android:layout_marginBottom="8dp"/>
 
         <Button
             android:id="@+id/btnChangeProfilePic"
@@ -49,7 +52,12 @@
             android:layout_below="@+id/btnLogout"
             android:text="Change Profile Pic"
             android:layout_alignParentRight="true"
-            android:layout_marginBottom="20dp"/>
+            android:layout_marginBottom="20dp"
+            android:padding="8dp"
+            android:background="@color/colorInstagramBlue"
+            android:textColor="@color/colorWhite"
+            />
+
 
         <View
             android:id="@+id/divider"

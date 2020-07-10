@@ -122,7 +122,7 @@ public class PostsFragment extends Fragment {
         rvPosts.addItemDecoration(decoration);
     }
 
-    private void refreshPostList(int i) {
+    public void refreshPostList(int i) {
         adapter.clear();
         queryPosts();
         swipeContainer.setRefreshing(false);
