@@ -28,6 +28,7 @@ import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.resource.bitmap.RoundedCorners;
+import com.example.parstagram.EndlessRecyclerViewScrollListener;
 import com.example.parstagram.MainActivity;
 import com.example.parstagram.Post;
 import com.example.parstagram.PostsAdapter;
@@ -55,8 +56,10 @@ public class PostsFragment extends Fragment {
     Toolbar toolbar;
 
     private SwipeRefreshLayout swipeContainer;
+    private EndlessRecyclerViewScrollListener scrollListener;
 
-
+    int incrementLimitAmt = 5;
+    int currentLimit = 5;
 
     public PostsFragment() {
         // Required empty public constructor
@@ -102,7 +105,24 @@ public class PostsFragment extends Fragment {
         allPosts = new ArrayList<>();
         adapter = new PostsAdapter(getContext(), allPosts);
         rvPosts.setAdapter(adapter);
-        rvPosts.setLayoutManager(new LinearLayoutManager(getContext()));
+        LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getContext());
+        rvPosts.setLayoutManager(linearLayoutManager);
+
+
+        // SET UP ENDLESS SCROLLING
+
+        // Retain an instance so that you can call `resetState()` for fresh searches
+        scrollListener = new EndlessRecyclerViewScrollListener(linearLayoutManager) {
+            @Override
+            public void onLoadMore(int page, int totalItemsCount, RecyclerView view) {
+                // Triggered only when new data needs to be appended to the list
+                // Add whatever code is needed to append new items to the bottom of the list
+                loadMorePosts(page);
+            }
+        };
+        // Adds the scroll listener to RecyclerView
+        rvPosts.addOnScrollListener(scrollListener);
+
         queryPosts();
 
         // SET UP SWIPE TO REFRESH
@@ -129,6 +149,36 @@ public class PostsFragment extends Fragment {
         rvPosts.addItemDecoration(decoration);
     }
 
+    private void loadMorePosts(int page) {
+        final int oldLimit = currentLimit;
+        currentLimit += incrementLimitAmt;
+
+        ParseQuery<Post> query = ParseQuery.getQuery(Post.class);
+        query.include(Post.KEY_USER);
+        query.setLimit(currentLimit);
+        query.addDescendingOrder(Post.KEY_CREATED_KEY);
+        query.findInBackground(new FindCallback<Post>() {
+            @Override
+            public void done(List<Post> posts, ParseException e) {
+                if (e != null) {
+                    Log.e(TAG, "Issue with getting posts", e);
+                    return;
+                }
+                for (Post post : posts) {
+                    Log.i(TAG, "Post: " + post.getDescription() + ", username: " + post.getUser().getUsername());
+                }
+                if (currentLimit >= posts.size() + incrementLimitAmt) {
+                    return;
+                }
+                ArrayList<Post> newPosts = new ArrayList<Post>(posts.subList(oldLimit, currentLimit));
+
+                adapter.addAll(newPosts);
+                adapter.notifyItemRangeInserted(oldLimit, allPosts.size());
+            }
+        });
+    }
+
+
     public void refreshPostList(int i) {
         adapter.clear();
         queryPosts();
@@ -151,7 +201,7 @@ public class PostsFragment extends Fragment {
     protected void queryPosts() {
         ParseQuery<Post> query = ParseQuery.getQuery(Post.class);
         query.include(Post.KEY_USER);
-        query.setLimit(20);
+        query.setLimit(currentLimit);
         query.addDescendingOrder(Post.KEY_CREATED_KEY);
         query.findInBackground(new FindCallback<Post>() {
             @Override
