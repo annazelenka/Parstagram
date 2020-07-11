@@ -47,7 +47,7 @@ Please list two areas of the assignment you'd like to **discuss further with you
 
 Here's a walkthrough of implemented user stories:
 
-[walkthrough](https://imgur.com/a/61n531a) there are 2 parts! :)
+[walkthrough](https://imgur.com/a/61n531a) there are 3 parts! :)
 
 GIF created with [Kap](https://getkap.co/).
 
@@ -60,7 +60,9 @@ List an 3rd party libraries, icons, graphics, or other assets you used in your a
 
 ## Notes
 
-Describe any challenges encountered while building the app.
+One required feature is to enable the user to take a photo using their phone's camera and then upload it. I had trouble moving this code from the Main Activity to the ComposeFragment after we broke up the main screen into different fragments.
+
+I also had difficulty implementing infinite scrolling because I mistakenly recreated a linear layout instead of using the existing linear layout. Doing the latter fixed this bug. 
 
 ## License
 
